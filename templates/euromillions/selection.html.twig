@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sélectionner des numéros 
+{% endblock %}
+
+{% block body %}
+
+
+    
+
+    <form method="post">
+        <h2>Boules</h2>
+        {% for i in 1..5 %}
+            <label for="boule_{{ i }}">Boule {{ i }} :</label>
+            <select name="boule_{{ i }}" id="boule_{{ i }}">
+                {% for num in 1..50 %}
+                    <option value="{{ num }}">{{ num }}</option>
+                {% endfor %}
+            </select>
+            <br />
+        {% endfor %}
+
+        <h2>Étoiles</h2>
+        {% for j in 1..2 %}
+            <label for="etoile_{{ j }}">Étoile {{ j }} :</label>
+            <select name="etoile_{{ j }}" id="etoile_{{ j }}">
+                {% for num in 1..9 %}
+                    <option value="{{ num }}">{{ num }}</option>
+                {% endfor %}
+            </select>
+            <br />
+        {% endfor %}
+
+        <button type="submit">Soumettre</button>
+    </form>
+{% endblock %}

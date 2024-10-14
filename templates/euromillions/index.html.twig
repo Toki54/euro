@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello EuromillionsController!{% endblock %}
+
+{% block body %}
+    <header>
+        <h1>Statistiques Euromillions</h1>
+    </header>
+
+    <form method="get" action="{{ path('euromillions') }}">
+        <label for="boule">Sélectionnez un nombre de boule (1-50) :</label>
+        <input type="number" name="boule" min="1" max="50" required>
+
+        <label for="etoile">Sélectionnez un nombre d'étoile (1-9) :</label>
+        <input type="number" name="etoile" min="1" max="9" required>
+
+        <button type="submit">Envoyer</button>
+    </form>
+
+    {% if total > 0 %}
+        <h2>Résultats pour Boule {{ app.request.get('boule') }} et Étoile {{ app.request.get('etoile') }}</h2>
+        <h3>Total d'occurrences : {{ total }}</h3>
+
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Occurrences</th>
+                    <th>Pourcentage (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for number, count in bouleCount %}
+                    <tr>
+                        <td>{{ number }}</td>
+                        <td>{{ count }}</td>
+                        <td>{{ boulePercentages[number]|number_format(2) }}</td>
+                    </tr>
+                {% endfor %}
+                {% for number, count in etoileCount %}
+                    <tr>
+                        <td>{{ number }}</td>
+                        <td>{{ count }}</td>
+                        <td>{{ etoilePercentages[number]|number_format(2) }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

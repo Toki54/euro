@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Résultats de la sélection 
+{% endblock %}
+
+{% block body %}
+
+
+    
+        <h1>Résultats de votre sélection</h1>
+   
+
+    <h2>Nombre de fois que chaque numéro a été tiré</h2>
+    <table border="1">
+        <tr>
+            <th>Numéro</th>
+            <th>Nombre de fois</th>
+            <th>Pourcentage</th>
+        </tr>
+        <h3>Boules</h3>
+        {% for i in 1..5 %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ resultats.boules[i] }}</td>
+                <td>{{ pourcentages.boules[i] | number_format(2) }}%</td>
+            </tr>
+        {% endfor %}
+        <h3>Étoiles</h3>
+        {% for j in 1..2 %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ resultats.etoiles[j] }}</td>
+                <td>{{ pourcentages.etoiles[j] | number_format(2) }}%</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <p>Total des tirages : {{ totalTirages }}</p>
+
+    <a href="{{ path('euromillions') }}">Retour à la sélection</a>
+{% endblock %}
