@@ -1,41 +1,124 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Résultats de la sélection 
+{% block title %}Résultats de la sélection
 {% endblock %}
 
 {% block body %}
+	<h1>Statistiques Euromillions</h1>
 
+	<h2>Moyennes par colonne</h2>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Colonne</th>
+				<th>Moyenne des boules</th>
+				<th>Moyenne des étoiles</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for i in 1..5 %}
+				<tr>
+					<td>{{ i }}</td>
+					<td>{{ moyenneBoules[i - 1] | number_format(2) }}</td>
+					{% if i <= 2 %}
+						<td>{{ moyenneEtoiles[i - 1] | number_format(2) }}</td>
+					{% else %}
+						<td>-</td>
+					{% endif %}
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 
-    
-        <h1>Résultats de votre sélection</h1>
-   
+	<h2>Différences entre les boules par tirage (Toutes les lignes)</h2>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Tirage</th>
+				<th>Boules</th>
+				<th>Différence Boule 1-2</th>
+				<th>Différence Boule 2-3</th>
+				<th>Différence Boule 3-4</th>
+				<th>Différence Boule 4-5</th>
+				<th>Différence Étoile 1-2</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for tirage in diffBoules %}
+				<tr>
+					<td>{{ loop.index }}</td>
+					<td>{{ tirage.boules | join(', ') }}</td>
+					<!-- Affiche les boules -->
+					<td>{{ tirage.differences[0] ?? '-' }}</td>
+					<td>{{ tirage.differences[1] ?? '-' }}</td>
+					<td>{{ tirage.differences[2] ?? '-' }}</td>
+					<td>{{ tirage.differences[3] ?? '-' }}</td>
+					<td>{{ tirage.diffEtoiles[0] ?? '-' }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 
-    <h2>Nombre de fois que chaque numéro a été tiré</h2>
-    <table border="1">
-        <tr>
-            <th>Numéro</th>
-            <th>Nombre de fois</th>
-            <th>Pourcentage</th>
-        </tr>
-        <h3>Boules</h3>
-        {% for i in 1..5 %}
-            <tr>
-                <td>{{ loop.index }}</td>
-                <td>{{ resultats.boules[i] }}</td>
-                <td>{{ pourcentages.boules[i] | number_format(2) }}%</td>
-            </tr>
-        {% endfor %}
-        <h3>Étoiles</h3>
-        {% for j in 1..2 %}
-            <tr>
-                <td>{{ loop.index }}</td>
-                <td>{{ resultats.etoiles[j] }}</td>
-                <td>{{ pourcentages.etoiles[j] | number_format(2) }}%</td>
-            </tr>
-        {% endfor %}
-    </table>
+	<h2>Fréquences des Séquences de Différences</h2>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Séquence de Différences</th>
+				<th>Fréquence</th>
+			</tr>
+		</thead>
+		<tbody>
+{% for sequence, count in recurrentSequences %}
 
-    <p>Total des tirages : {{ totalTirages }}</p>
+				<tr>
+					<td>{{ sequence }}</td>
+					<td>{{ count }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 
-    <a href="{{ path('euromillions') }}">Retour à la sélection</a>
+	<h2>Fréquence des boules tirées</h2>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Boule</th>
+				<th>Fréquence</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for boule, freq in bouleFrequency %}
+				<tr>
+					<td>{{ boule }}</td>
+					<td>{{ freq }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<h2>Schémas Récurrents dans les Tirages</h2>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Schéma de Différences</th>
+				<th>Occurrences</th>
+				<th>Tirages Concernés</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for pattern, data in repeatedPatterns %}
+				<tr>
+					<td>{{ pattern }}</td>
+					<td>{{ data.count }}</td>
+					<td>{{ data.positions | join(', ') }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<p>Total des tirages :
+		{{ totalTirages }}</p>
+
+	<a href="{{ path('app_selection') }}">Retour à la sélection</a>
 {% endblock %}
+
